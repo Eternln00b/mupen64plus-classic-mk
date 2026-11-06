@@ -1,0 +1,28 @@
+mupen64plus-core:
+make VC=0 OSD=0 NETPLAY=0 -j$(nproc) install
+
+mupen64plus-rsp-hle, mupen64plus-input-sdl, mupen64plus-ui-console, mupen64plus-ae-rsp-cxd4,  mupen64plus-ae-rsp-hle,  mupen64plus-ae-video-glide64mk2 :
+make -j$(nproc) APIDIR="$HOME/projects/N00b-Power.SDK/sysroot/usr/include/mupen64plus" install
+
+mupen64plus-audio-sdl :
+make -j$(nproc) NO_SPEEX=1 APIDIR="$HOME/projects/N00b-Power.SDK/sysroot/usr/include/mupen64plus" install
+
+==========================================================================================================================================================
+
+header needed by the plugin mupen64plus-ae-video-glide64mk2 :
+
+mkdir -p ${SDK_SYSROOT}/usr/include/android/
+cat > ${SDK_SYSROOT}/usr/include/android/log.h << 'EOF'
+#ifndef ANDROID_LOG_H
+#define ANDROID_LOG_H
+
+#include <stdio.h>
+
+#ifndef __android_log_print
+#define __android_log_print(prio, tag, fmt, ...) \
+    fprintf(stderr, "[%s] " fmt "\n", tag, ##__VA_ARGS__)
+#endif
+
+#endif /* ANDROID_LOG_H */
+EOF
+
